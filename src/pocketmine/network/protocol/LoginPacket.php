@@ -53,19 +53,14 @@ class LoginPacket extends DataPacket{
 		$this->username = $this->getString();
 		$this->protocol1 = (\PHP_INT_SIZE === 8 ? \unpack("N", $this->get(4))[1] << 32 >> 32 : \unpack("N", $this->get(4))[1]);
 		$this->protocol2 = (\PHP_INT_SIZE === 8 ? \unpack("N", $this->get(4))[1] << 32 >> 32 : \unpack("N", $this->get(4))[1]);
-		if($this->protocol1 < Info::CURRENT_PROTOCOL){ //New fields!
-			$this->setBuffer(\null, 0); //Skip batch packet handling
-			return;
-		}
+
 		$this->clientId = Binary::readLong($this->get(8));
 		$this->clientUUID = $this->getUUID();
 		$this->serverAddress = $this->getString();
 		$this->clientSecret = $this->getString();
 
 		$this->slim = $this->getByte() > 0;
-		if($this->protocol1 > Info::CURRENT_PROTOCOL) {
-			$this->isTransparent = $this->getByte() > 0;
-		}
+		$this->isTransparent = $this->getByte() > 0;
 		$this->skin = $this->getString();
 	}
 

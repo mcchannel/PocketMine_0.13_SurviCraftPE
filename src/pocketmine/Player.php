@@ -112,6 +112,7 @@ use pocketmine\network\protocol\DisconnectPacket;
 use pocketmine\network\protocol\EntityEventPacket;
 use pocketmine\network\protocol\FullChunkDataPacket;
 use pocketmine\network\protocol\Info as ProtocolInfo;
+use pocketmine\network\protocol\Info;
 use pocketmine\network\protocol\PlayerActionPacket;
 use pocketmine\network\protocol\PlayStatusPacket;
 use pocketmine\network\protocol\RespawnPacket;
@@ -1959,23 +1960,19 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 					break;
 				}
 
-				if($packet->protocol1 < ProtocolInfo::CURRENT_PROTOCOL){
-					if($packet->protocol1 < ProtocolInfo::CURRENT_PROTOCOL){
-					$this->close("", "§cOutdated client!\n§aPlease update your MCPE.");
-
-						$pk = new PlayStatusPacket();
-						$pk->status = PlayStatusPacket::LOGIN_FAILED_CLIENT;
-						$this->directDataPacket($pk);
-					}else{
-					$this->close("", "§cOutdated server!\n§eComing Soon...");
-
-						$pk = new PlayStatusPacket();
-						$pk->status = PlayStatusPacket::LOGIN_FAILED_SERVER;
-						$this->directDataPacket($pk);
+				if($packet->protocol1 != ProtocolInfo::CURRENT_PROTOCOL){
+					if($packet->protocol1 < ProtocolInfo::CURRENT_PROTOCOL) {
+						$message = "upgrade";
+					} else {
+						$message = "downgrade";
 					}
-					$this->close("", $message, \false);
 
-					break;
+					$pk = new PlayStatusPacket();
+					$pk->status = PlayStatusPacket::LOGIN_FAILED_CLIENT;
+					$this->dataPacket($pk);
+					$this->close("", TextFormat::RED . "Please " . $message . " to MCPE " . TextFormat::GREEN . $this->getServer()->getVersion() . TextFormat::RED . " to join.", false);
+
+					return;
 				}
 
 				$this->randomClientId = $packet->clientId;
