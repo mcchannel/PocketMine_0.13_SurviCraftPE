@@ -1956,7 +1956,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				$this->setNameTag($this->username);
 				$this->iusername = \strtolower($this->username);
 
-				if(\count($this->server->getOnlinePlayers()) >= $this->server->getMaxPlayers() and $this->kick("§cServer is Full.\n§bGet VIPS on §bFacebook. §aLink §ebit.ly/MrAkeKy.\n\n\n\n§aJoin full server.\n§bAnd more..", \false)){
+				if(count($this->server->getOnlinePlayers()) >= $this->server->getMaxPlayers() and $this->kick("disconnectionScreen.serverFull", false)){
 					break;
 				}
 
