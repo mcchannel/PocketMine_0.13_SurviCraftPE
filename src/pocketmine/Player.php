@@ -3352,15 +3352,15 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 
 		$this->server->getPluginManager()->callEvent($ev = new PlayerDeathEvent($this, $this->getDrops(), new TranslationContainer($message, $params)));
 
-		if(!$ev->getKeepInventory()){
-			foreach($ev->getDrops() as $item){
-				$this->level->dropItem($this, $item);
-			}
-
-			if($this->inventory !== \null){
-				$this->inventory->clearAll();
-			}
-		}
+//		if(!$ev->getKeepInventory()){
+//			foreach($ev->getDrops() as $item){
+//				$this->level->dropItem($this, $item);
+//			}
+//
+//			if($this->inventory !== \null){
+//				$this->inventory->clearAll();
+//			}
+//		}
 
 		if($ev->getDeathMessage() != ""){
 //			$this->server->broadcast($ev->getDeathMessage(), Server::BROADCAST_CHANNEL_USERS);
